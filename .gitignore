@@ -1,5 +1,6 @@
-# Compiled class file
-*.class
+# IDE
+**/.settings
+**/.idea
 
 # Log file
 *.log
