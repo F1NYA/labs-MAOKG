@@ -7,12 +7,13 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.*;
 import javax.swing.*;
 import javax.vecmath.*;
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 
 public class Scrat extends JFrame {
     public Canvas3D myCanvas3D = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
 
-    public Scrat() {
+    public Scrat() throws FileNotFoundException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         SimpleUniverse su = new SimpleUniverse(myCanvas3D);
@@ -43,25 +44,21 @@ public class Scrat extends JFrame {
         app.setMaterial(new Material(color, color, color, color, 150.0f));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         new Scrat();
     }
 
-    public void createSceneGraph(SimpleUniverse su) {
+    public void createSceneGraph(SimpleUniverse su) throws FileNotFoundException {
         ObjectFile f = new ObjectFile(ObjectFile.RESIZE);
         BoundingSphere bs = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
         BranchGroup scratBranchGroup = new BranchGroup();
         // Background scratBackground = new Background(new Color3f(-1.0f, -1.0f, 1.0f));
 
-        Scene scratScene = null;
-        try {
-            scratScene = f.load("resources/scrat.obj");
-        } catch (Exception e) {
-            System.out.println("File loading failed:" + e);
-        }
+        Scene scratScene = f.load("resources/scrat.obj");
+        Scene catScene = f.load("resources/cat.obj");
 
-        assert scratScene != null;
         Hashtable roachNamedObjects = scratScene.getNamedObjects();
+        Hashtable catNamedObjects = catScene.getNamedObjects();
 
         // start animation
         Transform3D startTransformation = new Transform3D();
@@ -75,6 +72,28 @@ public class Scrat extends JFrame {
         int movesCount = 100; // moves count
         int movesDuration = 500; // moves for 0,3 seconds
         int startTime = 0; // launch animation after timeStart seconds
+
+        Appearance catAppearance = new Appearance();
+
+        Shape3D cat = (Shape3D) catNamedObjects.get("20430_cat");
+        catScene.getSceneGroup().removeAllChildren();
+
+        TransformGroup wholeCat = new TransformGroup();
+        Transform3D transform3D = new Transform3D();
+        transform3D.rotX(-Math.PI / 2);
+
+        transform3D.setScale(0.1);
+        wholeCat.setTransform(transform3D);
+        wholeCat.addChild(cat);
+
+        catAppearance.setTexture(getTexture("web.png"));
+        TextureAttributes texAttr = new TextureAttributes();
+        texAttr.setTextureMode(TextureAttributes.COMBINE);
+        catAppearance.setTextureAttributes(texAttr);
+        catAppearance.setMaterial(getMaterial());
+        cat.setAppearance(catAppearance);
+
+        scratBranchGroup.addChild(wholeCat);
 
         Appearance taleAppearance = new Appearance();
         setToMyDefaultAppearance(taleAppearance, new Color3f(0.4f, 0.3f, 0.2f));
@@ -314,6 +333,27 @@ public class Scrat extends JFrame {
         transformGroup.addChild(node);
 
         return transformGroup;
+    }
+
+    Texture getTexture(String path) {
+        TextureLoader textureLoader = new TextureLoader("resources\\" + path, "LUMINANCE", myCanvas3D);
+        Texture texture = textureLoader.getTexture();
+        texture.setBoundaryModeS(Texture.WRAP);
+        texture.setBoundaryModeT(Texture.WRAP);
+        texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
+        return texture;
+    }
+
+    Material getMaterial() {
+        Material material = new Material();
+
+        material.setAmbientColor(new Color3f(0.33f, 0.26f, 0.23f));
+        material.setDiffuseColor(new Color3f(0.50f, 0.11f, 0.00f));
+        material.setSpecularColor(new Color3f(0.95f, 0.73f, 0.00f));
+        material.setShininess(0.3f);
+        material.setLightingEnable(true);
+
+        return material;
     }
 
 }

@@ -156,7 +156,7 @@ public class Cat extends JFrame {
     private void addBoatAppearance() throws IOException {
         Appearance appearance = new Appearance();
 
-        appearance.setTexture(getTexture("web.png"));
+        appearance.setTexture(getTexture("rubber.jpg"));
         TextureAttributes texAttr = new TextureAttributes();
         texAttr.setTextureMode(TextureAttributes.COMBINE);
 
