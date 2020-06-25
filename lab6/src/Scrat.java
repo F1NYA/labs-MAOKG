@@ -1,12 +1,12 @@
 import com.sun.j3d.loaders.Scene;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
+import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import javax.media.j3d.*;
 import javax.swing.*;
 import javax.vecmath.*;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class Scrat extends JFrame {
@@ -51,7 +51,7 @@ public class Scrat extends JFrame {
         ObjectFile f = new ObjectFile(ObjectFile.RESIZE);
         BoundingSphere bs = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
         BranchGroup scratBranchGroup = new BranchGroup();
-        Background scratBackground = new Background(new Color3f(-1.0f, -1.0f, 1.0f));
+        // Background scratBackground = new Background(new Color3f(-1.0f, -1.0f, 1.0f));
 
         Scene scratScene = null;
         try {
@@ -245,6 +245,12 @@ public class Scrat extends JFrame {
         nutTransformGroup.addChild(nutShape.cloneTree());
         sceneGroup.addChild(nutTransformGroup.cloneTree());
 
+        TextureLoader loader = new TextureLoader("resources//ukraine.png", myCanvas3D);
+        Background scratBackground = new Background(loader.getImage());
+        scratBackground.setImageScaleMode(Background.SCALE_FIT_ALL);
+
+        BoundingSphere backgroundBounds = new BoundingSphere(new Point3d(9.0, 0.0, 0.0), 0.0);
+        scratBackground.setApplicationBounds(backgroundBounds);
 
         TransformGroup whiteTransformGroup = translate(
                 scratStartTransformGroup,

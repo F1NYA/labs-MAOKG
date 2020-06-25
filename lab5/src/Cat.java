@@ -31,7 +31,8 @@ public class Cat extends JFrame {
         configureUniverse();
         addModelToUniverse();
         setCatElementsList();
-        addAppearance();
+        addBoatAppearance();
+        addCatAppearance();
         addImageBackground();
         addLightToUniverse();
         addOtherLight();
@@ -110,8 +111,15 @@ public class Cat extends JFrame {
         root.addChild(wholeCat);
     }
 
+    private Shape3D getBoatShape() throws IOException {
+        Scene boatScene = getSceneFromFile("resources\\Boat.obj");
+        Shape3D boat = (Shape3D) boatScene.getNamedObjects().get("frame0");
+        boatScene.getSceneGroup().removeAllChildren();
+        return boat;
+    }
+
     Texture getTexture(String path) {
-        TextureLoader textureLoader = new TextureLoader(path, "LUMINANCE", canvas);
+        TextureLoader textureLoader = new TextureLoader("resources\\" + path, "LUMINANCE", canvas);
         Texture texture = textureLoader.getTexture();
         texture.setBoundaryModeS(Texture.WRAP);
         texture.setBoundaryModeT(Texture.WRAP);
@@ -131,10 +139,10 @@ public class Cat extends JFrame {
         return material;
     }
 
-    private void addAppearance() {
+    private void addCatAppearance() {
         Appearance appearance = new Appearance();
 
-        appearance.setTexture(getTexture("resources//web.png"));
+        appearance.setTexture(getTexture("web.png"));
         TextureAttributes texAttr = new TextureAttributes();
         texAttr.setTextureMode(TextureAttributes.COMBINE);
 
@@ -145,8 +153,24 @@ public class Cat extends JFrame {
         cat.setAppearance(appearance);
     }
 
+    private void addBoatAppearance() throws IOException {
+        Appearance appearance = new Appearance();
+
+        appearance.setTexture(getTexture("web.png"));
+        TextureAttributes texAttr = new TextureAttributes();
+        texAttr.setTextureMode(TextureAttributes.COMBINE);
+
+        appearance.setTextureAttributes(texAttr);
+        //appearance.setMaterial(getMaterial());
+
+        Shape3D boat = getBoatShape();
+        boat.setAppearance(appearance);
+
+        root.addChild(boat);
+    }
+
     private void addImageBackground() {
-        TextureLoader loader = new TextureLoader("resources//parimatch.png", canvas);
+        TextureLoader loader = new TextureLoader("resources\\parimatch.png", canvas);
         Background background = new Background(loader.getImage());
         background.setImageScaleMode(Background.SCALE_FIT_ALL);
 
