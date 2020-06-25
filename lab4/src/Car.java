@@ -9,6 +9,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Car implements ActionListener {
     private final TransformGroup carTransformGroup = new TransformGroup();
@@ -16,7 +17,7 @@ public class Car implements ActionListener {
 
     private float angle = 0;
 
-    private Car() {
+    private Car() throws IOException {
         Timer timer = new Timer(50, this);
         timer.start();
 
@@ -27,11 +28,11 @@ public class Car implements ActionListener {
         u.addBranchGraph(scene);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Car();
     }
 
-    private BranchGroup createSceneGraph() {
+    private BranchGroup createSceneGraph() throws IOException {
         BranchGroup root = new BranchGroup();
 
         carTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -63,7 +64,7 @@ public class Car implements ActionListener {
         return root;
     }
 
-    private void emitCar() {
+    private void emitCar() throws IOException {
         emitAnimatedBodyTransformer(CarBody.getFrontCylinderPart());
         emitAnimatedBodyTransformer(CarBody.getFrontWindow());
 
@@ -107,7 +108,7 @@ public class Car implements ActionListener {
         carTransformGroup.addChild(carWheelsTransformGroup);
     }
 
-    private void emitWheel(float x, float y, float z) {
+    private void emitWheel(float x, float y, float z) throws IOException {
         TransformGroup carWheelTransformGroup = new TransformGroup();
 
         Transform3D wheelTransform = new Transform3D();

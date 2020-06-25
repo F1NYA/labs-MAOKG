@@ -146,7 +146,7 @@ public class Cat extends JFrame {
     }
 
     private void addImageBackground() {
-        TextureLoader loader = new TextureLoader("resources//tree.png", canvas);
+        TextureLoader loader = new TextureLoader("resources//parimatch.png", canvas);
         Background background = new Background(loader.getImage());
         background.setImageScaleMode(Background.SCALE_FIT_ALL);
 

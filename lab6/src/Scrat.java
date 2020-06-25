@@ -6,6 +6,7 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.*;
 import javax.swing.*;
 import javax.vecmath.*;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class Scrat extends JFrame {
@@ -61,9 +62,6 @@ public class Scrat extends JFrame {
 
         assert scratScene != null;
         Hashtable roachNamedObjects = scratScene.getNamedObjects();
-        for (var e = roachNamedObjects.keys(); e.hasMoreElements(); ) {
-            System.out.println("Name: " + e.nextElement());
-        }
 
         // start animation
         Transform3D startTransformation = new Transform3D();
